@@ -35,7 +35,7 @@ export class DetailsPage implements OnInit {
       this.item = result.payload.data();
       this.totalprice = this.item.price;
     })
-    this.firebaseService.getExtras()
+    this.firebaseService.getOrder()
     .then(result => {
       this.extras = result;
     })
