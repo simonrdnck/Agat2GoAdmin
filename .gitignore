@@ -30,5 +30,4 @@ npm-debug.log*
 /plugins
 /www
 *.code-workspace
-package.json
-package-lock.json
+
