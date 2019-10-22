@@ -19,26 +19,20 @@ export class DetailsPage implements OnInit {
   item = new Item();
   prodId: String;
   backBtn = "Zurück";
-  extras: Array<any>;
-  addedExtras: Array<Extra> = []; 
-  totalprice = 0;
+  prods: Array<any>;
 
 
   ngOnInit() {
 
     this.data.currentMessage.subscribe(prodId => this.prodId = prodId)
     if(this.prodId == "no id"){
-      this.router.navigate(["/tabs/tab1"]);
+      this.router.navigate(["/home"]);
     }
-    this.firebaseService.getProduct(this.prodId)
-    .then(result => {
-      this.item = result.payload.data();
-      this.totalprice = this.item.price;
-    })
-    this.firebaseService.getOrder()
-    .then(result => {
-      this.extras = result;
-    })
+    this.firebaseService.getOrder(this.prodId)
+    .then(
+      res =>{
+        this.prods = res.payload.data().products;
+      })
 
   }
 
