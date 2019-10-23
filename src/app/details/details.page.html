@@ -10,7 +10,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-radio-group>
+   
       <ion-list-header>
         <ion-label>Extras</ion-label>
       </ion-list-header>
@@ -20,9 +20,9 @@
           <h3>{{item.payload.doc.data().products[0].totalprice.toFixed(2)}} €</h3>
           <h5>{{item.payload.doc.data().products[0].extra[0].name}} </h5>
         </ion-label>
-        <ion-radio slot="end"></ion-radio>
-        <!--<ion-checkbox slot="end" (click)="newAddExtra(extras.indexOf(item))"></ion-checkbox>-->
+        
+       <ion-checkbox slot="end" (click)="newAddExtra(extras.indexOf(item))"></ion-checkbox>
       </ion-item>
-    </ion-radio-group>
+   
   </ion-list>
 </ion-content>
