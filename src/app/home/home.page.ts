@@ -20,14 +20,19 @@ export class HomePage implements OnInit{
   ) {}
 
   ngOnInit() {
-    this.firebaseService.getOrder()
-      .then(result => {
-        this.items = result;
-      })
+    this.loadOrders()
+    setInterval(()=> { this.loadOrders() }, 5 * 1000);
+  }
+
+  loadOrders(){
+    this.firebaseService.getOrders()
+    .then(result => {
+      this.items = result;
+    })
   }
 
   toDetailPage(item) {
-    this.prodId = item.payload.doc.data().id;
+    this.prodId = item.payload.doc.id;
     this.data.changeMessage(this.prodId);
     this.router.navigate(["/details"]);
   }

@@ -19,26 +19,21 @@ export class DetailsPage implements OnInit {
   item = new Item();
   prodId: String;
   backBtn = "Zurück";
-  extras: Array<any>;
-  addedExtras: Array<Extra> = []; 
-  totalprice = 0;
-
+  prods: Array<any>;
+  userId: String;
 
   ngOnInit() {
 
     this.data.currentMessage.subscribe(prodId => this.prodId = prodId)
-    if(this.prodId == "no id"){
-      this.router.navigate(["/tabs/tab1"]);
+    if (this.prodId == "no id") {
+      this.router.navigate(["/home"]);
     }
-    this.firebaseService.getProduct(this.prodId)
-    .then(result => {
-      this.item = result.payload.data();
-      this.totalprice = this.item.price;
-    })
-    this.firebaseService.getOrder()
-    .then(result => {
-      this.extras = result;
-    })
+    this.firebaseService.getOrder(this.prodId)
+      .then(
+        res => {
+          this.prods = res.payload.data().products;
+          this.userId = res.payload.data().user;
+        })
 
   }
 
@@ -49,12 +44,12 @@ class Item {
   public price: number;
   public id: String;
 
-  constructor() {}
+  constructor() { }
 };
 
 class Extra {
   public name: String;
   public price: number;
 
-  constructor(){}
+  constructor() { }
 };
