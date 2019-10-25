@@ -16,10 +16,10 @@
     <ion-list-header>
       <ion-label>Bestellungen</ion-label>
     </ion-list-header>
-    <ion-item *ngFor="let item of items" (click)="toDetailPage(item)">
+    <ion-item class="item-content-green" *ngFor="let item of items" (click)="toDetailPage(item)">
       <ion-icon slot="end" color="medium" name="arrow-forward"></ion-icon>
     
-      <ion-label>
+      <ion-label class="item-content-green">
         <br>
         <h2>{{item.payload.doc.id}}</h2>
        
