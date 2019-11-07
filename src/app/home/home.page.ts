@@ -8,7 +8,7 @@ import { DataService } from '../services/data.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit {
 
   items: Array<any>;
   formattedItems: Array<formattedItem> = [];
@@ -18,26 +18,32 @@ export class HomePage implements OnInit{
     public firebaseService: FirebaseService,
     private router: Router,
     private data: DataService,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.loadOrders()
-    //setInterval(()=> { this.loadOrders() }, 5 * 1000);
+
   }
 
-  loadOrders(){
+  ionViewWillEnter() {
+    this.loadOrders()
+  }
+
+  loadOrders() {
+    this.formattedItems = []
     this.firebaseService.getOrders()
-    .then(result => {
-      this.items = result;
-      this.items.forEach(element => {
-        var item = element.payload.doc.data()
-        item.id = element.payload.doc.id
-        var d = new Date(item.time);
-        item.time = d.toLocaleString();
-        this.formattedItems.push(item);
-      });
-      this.formattedItems.sort((a,b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0)); 
-    })
+      .then(result => {
+        this.items = result;
+        this.items.forEach(element => {
+          if (element.payload.doc.data().closed != true) {
+            var item = element.payload.doc.data()
+            item.id = element.payload.doc.id
+            var d = new Date(item.time);
+            item.time = d.toLocaleString();
+            this.formattedItems.push(item);
+          }
+        });
+        this.formattedItems.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
+      })
   }
 
   toDetailPage(id) {
@@ -55,4 +61,5 @@ class formattedItem {
   public user: string;
   public userId: string;
   public id: string;
+  public closed: boolean;
 }

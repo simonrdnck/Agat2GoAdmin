@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-details',
@@ -14,6 +15,8 @@ export class DetailsPage implements OnInit {
     public firebaseService: FirebaseService,
     private router: Router,
     private data: DataService,
+    public alertController: AlertController,
+    private route: ActivatedRoute
   ) { }
 
   item = new Item();
@@ -21,20 +24,49 @@ export class DetailsPage implements OnInit {
   backBtn = "Zurück";
   prods: Array<any>;
   userId: String;
+  userName: string;
 
   ngOnInit() {
+  };
 
-    this.data.currentMessage.subscribe(prodId => this.prodId = prodId)
-    if (this.prodId == "no id") {
-      this.router.navigate(["/home"]);
-    }
+  ionViewWillEnter(){
+    this.prodId = this.route.snapshot.paramMap.get('id');
     this.firebaseService.getOrder(this.prodId)
       .then(
         res => {
           this.prods = res.payload.data().products;
-          this.userId = res.payload.data().user;
+          this.userName = res.payload.data().user;
+          this.userId = res.payload.data().userId;
+          console.log(res.payload.data())
         })
+  }
 
+  async closeOrder() {
+
+    const alert = await this.alertController.create({
+      header: 'Bestätigen!',
+      message: 'Wollen Sie die Bestellung wirklich abschließen?',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Abgebrochen');
+          }
+        }, {
+          text: 'Weiter',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.firebaseService.closeOrder(this.prodId)
+            this.firebaseService.addBonus(this.userId)
+            this.router.navigateByUrl('/home')
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }
