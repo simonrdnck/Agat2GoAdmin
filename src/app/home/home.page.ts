@@ -45,14 +45,6 @@ export class HomePage implements OnInit {
         this.formattedItems.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
       })
   }
-
-  toDetailPage(id) {
-    this.prodId = id;
-    this.data.changeMessage(this.prodId);
-    this.router.navigate(["/details"]);
-  }
-
-
 }
 
 class formattedItem {
