@@ -58,9 +58,11 @@ export class DetailsPage implements OnInit {
           text: 'Weiter',
           handler: () => {
             console.log('Confirm Okay');
-            this.firebaseService.closeOrder(this.prodId)
-            this.firebaseService.addBonus(this.userId)
-            this.router.navigateByUrl('/home')
+            this.firebaseService.closeOrder(this.prodId);
+            this.prods.forEach(element => {
+              this.firebaseService.addBonus(this.userId);
+            });
+            this.router.navigateByUrl('/home');
           }
         }
       ]

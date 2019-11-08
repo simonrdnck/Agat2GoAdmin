@@ -1,39 +1,59 @@
 import { Component, OnInit } from '@angular/core';
+import { FirebaseService } from '../services/firebase.service';
+import { Router } from '@angular/router';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss']
 })
+
+
 export class ListPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
-  }
+
+  items: Array<any>;
+  formattedItems: Array<formattedItem> = [];
+  prodId: string;
+
+  constructor(
+    public firebaseService: FirebaseService,
+    private router: Router,
+    private data: DataService,
+  ) { }
 
   ngOnInit() {
+
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+
+  ionViewWillEnter() {
+    this.loadOrders()
+  }
+
+  loadOrders() {
+    this.formattedItems = []
+    this.firebaseService.getOrders()
+      .then(result => {
+        this.items = result;
+        this.items.forEach(element => {
+          if (element.payload.doc.data().closed == true) {
+            var item = element.payload.doc.data()
+            item.id = element.payload.doc.id
+            var d = new Date(item.time);
+            item.time = d.toLocaleString();
+            this.formattedItems.push(item);
+          }
+        });
+        this.formattedItems.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
+      })
+  }
+}
+
+class formattedItem {
+  public products: Array<any>;
+  public time: string;
+  public user: string;
+  public userId: string;
+  public id: string;
+  public closed: boolean;
 }

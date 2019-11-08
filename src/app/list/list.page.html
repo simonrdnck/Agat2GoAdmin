@@ -10,18 +10,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+
+
+  <ion-list inset="true">
+    <ion-list-header>
+      <ion-label>Bearbeitete Bestellungen</ion-label>
+    </ion-list-header>
+    <ion-item class="item-content-green" *ngFor="let item of formattedItems" [routerLink]="'/details/' + item.id">
+      <!-- <ion-label class="item-content-green"> -->
+      <ion-label>
+        <br>
+        <h2>{{item.time}}</h2>
+        <br>
+      </ion-label>
     </ion-item>
   </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
 </ion-content>

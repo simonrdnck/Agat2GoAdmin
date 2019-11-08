@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      Home
+      Offene Bestellungen
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -16,13 +16,21 @@
     <ion-list-header>
       <ion-label>Bestellungen</ion-label>
     </ion-list-header>
-    <ion-item class="item-content-green" *ngFor="let item of formattedItems" [routerLink]="'/details/' + item.id">
+    <ion-item  *ngFor="let item of formattedItems" [routerLink]="'/details/' + item.id">
       <!-- <ion-label class="item-content-green"> -->
-      <ion-label>
+          <ion-icon class="green" name="clock"  slot="end" *ngIf="item.tooLate == 1"></ion-icon>
+          <ion-icon class="yellow" name="warning" slot="end" *ngIf="item.tooLate == 2"></ion-icon>
+          <ion-icon class="red" name="alert" slot="end"  *ngIf="item.tooLate == 3"></ion-icon>
+      <ion-label  class="item-content-green" >
         <br>
         <h2>{{item.time}}</h2>
+      
         <br>
       </ion-label>
+
+  
     </ion-item>
+
+    
   </ion-list>
 </ion-content>

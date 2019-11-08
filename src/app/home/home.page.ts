@@ -13,6 +13,8 @@ export class HomePage implements OnInit {
   items: Array<any>;
   formattedItems: Array<formattedItem> = [];
   prodId: string;
+  currentTime: string;
+  
 
   constructor(
     public firebaseService: FirebaseService,
@@ -28,6 +30,25 @@ export class HomePage implements OnInit {
     this.loadOrders()
   }
 
+
+  compareTime(orderTime) {
+ 
+    let diffyellow = 5;
+    var d = new Date().toLocaleString("en-EN", {timeZone: "Europe/Berlin"});
+    var date = new Date(d)
+    var newDateyellow = new Date(orderTime.getTime() - diffyellow*60000);
+
+    if(date >= newDateyellow && date < orderTime){
+      return 2;
+    }
+    else if (date >= orderTime){
+      return 3;
+    }
+    else{
+      return 1;
+    }
+  }
+
   loadOrders() {
     this.formattedItems = []
     this.firebaseService.getOrders()
@@ -38,6 +59,7 @@ export class HomePage implements OnInit {
             var item = element.payload.doc.data()
             item.id = element.payload.doc.id
             var d = new Date(item.time);
+            item.tooLate = this.compareTime(d);
             item.time = d.toLocaleString();
             this.formattedItems.push(item);
           }
@@ -54,4 +76,5 @@ class formattedItem {
   public userId: string;
   public id: string;
   public closed: boolean;
+  public tooLate = 1;
 }
