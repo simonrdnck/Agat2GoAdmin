@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,14 @@ export class HomePage implements OnInit {
   formattedItems: Array<formattedItem> = [];
   prodId: string;
   currentTime: string;
+  loading: HTMLIonLoadingElement;
   
 
   constructor(
     public firebaseService: FirebaseService,
     private router: Router,
     private data: DataService,
+    private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -48,6 +51,24 @@ export class HomePage implements OnInit {
       return 1;
     }
   }
+
+  reloadPage(){
+    this.showLoading();
+    setTimeout(() => {
+      this.hideLoading();
+    }, 500);
+    this.loadOrders();
+    }
+     
+  
+    async showLoading(): Promise<void> {
+      this.loading = await this.loadingCtrl.create();
+      await this.loading.present();
+    }
+  
+    hideLoading(): Promise<boolean> {
+      return this.loading.dismiss()
+    }
 
   loadOrders() {
     this.formattedItems = []

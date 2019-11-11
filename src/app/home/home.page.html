@@ -14,8 +14,12 @@
 
   <ion-list inset="true">
     <ion-list-header>
-      <ion-label>Bestellungen</ion-label>
+      <ion-label><h2>Bestellungen</h2>
+       
+      </ion-label>
+     <ion-item> <ion-icon  name="refresh" slot="end"  (click)="reloadPage()"></ion-icon></ion-item>
     </ion-list-header>
+   
     <ion-item  *ngFor="let item of formattedItems" [routerLink]="'/details/' + item.id">
       <!-- <ion-label class="item-content-green"> -->
           <ion-icon class="green" name="clock"  slot="end" *ngIf="item.tooLate == 1"></ion-icon>
@@ -23,7 +27,7 @@
           <ion-icon class="red" name="alert" slot="end"  *ngIf="item.tooLate == 3"></ion-icon>
       <ion-label  class="item-content-green" >
         <br>
-        <h2>{{item.time}}</h2>
+        <h4>{{item.time}}</h4>
       
         <br>
       </ion-label>
