@@ -28,5 +28,5 @@
 
 <br>
 
-  <ion-button size="block" (click)="closeOrder()"> Bestellung abschließen</ion-button>
+  <ion-button *ngIf="!isClosed" size="block" (click)="closeOrder()"> Bestellung abschließen</ion-button>
 </ion-content>
