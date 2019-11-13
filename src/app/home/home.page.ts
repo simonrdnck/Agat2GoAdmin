@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { LoadingController, ToastController, Events } from '@ionic/angular';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,7 +25,7 @@ export class HomePage implements OnInit {
     private data: DataService,
     private loadingCtrl: LoadingController,
     public events: Events
-  ) { 
+  ) {
     events.subscribe('new:entry', () => {
       this.loadOrders()
     });
@@ -83,7 +84,7 @@ export class HomePage implements OnInit {
       .then(result => {
         this.formattedItems = []
         this.formattedItems = this.updateOrders(result)
-      })  
+      })
     }
 
   updateOrders(result): Array<formattedItem> {
@@ -116,5 +117,3 @@ class formattedItem {
   public tooLate = 1;
   public toGo: boolean;
 }
-
-

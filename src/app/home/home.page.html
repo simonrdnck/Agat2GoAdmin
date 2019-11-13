@@ -10,14 +10,15 @@
 </ion-header>
 
 <ion-content>
-
-
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content ></ion-refresher-content>
+  </ion-refresher>
   <ion-list inset="true">
     <ion-list-header>
-      <ion-label><h2>Bestellungen</h2>
-       
+      <ion-label><h2>Bestellungen </h2>
+       <!-- <ion-icon name="refresh"  (click)="reloadPage()"></ion-icon>-->
       </ion-label>
-     <ion-item> <ion-icon  name="refresh" slot="end"  (click)="reloadPage()"></ion-icon></ion-item>
+     <ion-label slo="start"></ion-label> 
     </ion-list-header>
    
     <ion-item  *ngFor="let item of formattedItems" [routerLink]="'/details/' + item.id">
