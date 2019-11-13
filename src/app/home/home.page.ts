@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { LoadingController, ToastController } from '@ionic/angular';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -61,14 +62,22 @@ export class HomePage implements OnInit {
     }
      
   
-    async showLoading(): Promise<void> {
-      this.loading = await this.loadingCtrl.create();
-      await this.loading.present();
-    }
-  
-    hideLoading(): Promise<boolean> {
-      return this.loading.dismiss()
-    }
+  async showLoading(): Promise<void> {
+    this.loading = await this.loadingCtrl.create();
+    await this.loading.present();
+  }
+
+  hideLoading(): Promise<boolean> {
+    return this.loading.dismiss()
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.loadOrders()
+      event.target.complete()
+    }, 1000);
+    
+  }
 
   loadOrders() {
     this.formattedItems = []
