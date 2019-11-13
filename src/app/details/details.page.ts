@@ -26,6 +26,7 @@ export class DetailsPage implements OnInit {
   userId: String;
   userName: string;
   isClosed = false;
+  toGo = true;
 
   ngOnInit() {
   };
@@ -39,7 +40,7 @@ export class DetailsPage implements OnInit {
           this.userName = res.payload.data().user;
           this.userId = res.payload.data().userId;
           this.isClosed = res.payload.data().closed;
-
+          this.toGo = res.payload.data().toGo;
         })
   }
 

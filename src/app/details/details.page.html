@@ -22,8 +22,17 @@
       </ion-label>
     </ion-item>
   </ion-list>
+  <br>
   <ion-label>
-    <h2 style="margin-left: 12px">Bestellung für: {{userName}}</h2>
+    <h2  class="info" style="">Bestellung für: {{userName}}</h2>
+  </ion-label>
+
+  <ion-label *ngIf="toGo">
+   <u><h2 class="info" style="">ToGo!</h2></u>
+  </ion-label>
+
+  <ion-label *ngIf="!toGo">
+    <u><h2 class="info" style="">Zum hier genießen!</h2></u>
   </ion-label>
 
 <br>

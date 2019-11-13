@@ -77,6 +77,7 @@ export class HomePage implements OnInit {
         this.items = result;
         this.items.forEach(element => {
           if (element.payload.doc.data().closed != true) {
+            
             var item = element.payload.doc.data()
             item.id = element.payload.doc.id
             var d = new Date(item.time);
@@ -98,4 +99,5 @@ class formattedItem {
   public id: string;
   public closed: boolean;
   public tooLate = 1;
+  public toGo: boolean;
 }

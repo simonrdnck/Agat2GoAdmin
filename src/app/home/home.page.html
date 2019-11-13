@@ -27,8 +27,9 @@
           <ion-icon class="red" name="alert" slot="end"  *ngIf="item.tooLate == 3"></ion-icon>
       <ion-label  class="item-content-green" >
         <br>
-        <h4>{{item.time}}</h4>
-      
+        <h4 *ngIf="!item.toGo">{{item.time}}, {{item.user}}</h4>
+        <h4 *ngIf="item.toGo">{{item.time}}, {{item.user}}, ToGo</h4>
+        
         <br>
       </ion-label>
 
