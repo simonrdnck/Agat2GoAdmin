@@ -4,18 +4,20 @@ import 'firebase/storage';
 import 'firebase/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
+import { Events } from '@ionic/angular';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class FirebaseService {
+export class FirebaseService{
 
   constructor(
     public afs: AngularFirestore,
     public afAuth: AngularFireAuth,
-
+    public events: Events
   ) { }
 
   private snapshotChangesSubscription: any;
@@ -24,6 +26,17 @@ export class FirebaseService {
   increment = firebase.firestore.FieldValue.increment(1)
 
   getOrders() {
+    return new Promise<any>((resolve, reject) => {
+      this.afs.collection('order').snapshotChanges()
+        .subscribe(snapshots => {
+          console.log("New Entry")
+          this.events.publish('new:entry');
+          resolve(snapshots)
+        })
+    })
+  }
+
+  loadOrders() {
     return new Promise<any>((resolve, reject) => {
       this.afs.collection('order').snapshotChanges()
         .subscribe(snapshots => {

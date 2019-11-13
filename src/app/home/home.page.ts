@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -16,78 +16,93 @@ export class HomePage implements OnInit {
   prodId: string;
   currentTime: string;
   loading: HTMLIonLoadingElement;
-  
+
 
   constructor(
     public firebaseService: FirebaseService,
     private router: Router,
     private data: DataService,
-    private loadingCtrl: LoadingController
-  ) { }
-
-  ngOnInit() {
-
+    private loadingCtrl: LoadingController,
+    public events: Events
+  ) { 
+    events.subscribe('new:entry', () => {
+      this.loadOrders()
+    });
   }
+
+  ngOnInit() { }
 
   ionViewWillEnter() {
-    this.loadOrders()
+    this.getOrders()
   }
 
-
   compareTime(orderTime) {
- 
     let diffyellow = 5;
-    var d = new Date().toLocaleString("en-EN", {timeZone: "Europe/Berlin"});
+    var d = new Date().toLocaleString("en-EN", { timeZone: "Europe/Berlin" });
     var date = new Date(d)
-    var newDateyellow = new Date(orderTime.getTime() - diffyellow*60000);
+    var newDateyellow = new Date(orderTime.getTime() - diffyellow * 60000);
 
-    if(date >= newDateyellow && date < orderTime){
+    if (date >= newDateyellow && date < orderTime) {
       return 2;
     }
-    else if (date >= orderTime){
+    else if (date >= orderTime) {
       return 3;
     }
-    else{
+    else {
       return 1;
     }
   }
 
-  reloadPage(){
+  reloadPage() {
     this.showLoading();
     setTimeout(() => {
       this.hideLoading();
     }, 500);
-    this.loadOrders();
-    }
-     
-  
-    async showLoading(): Promise<void> {
-      this.loading = await this.loadingCtrl.create();
-      await this.loading.present();
-    }
-  
-    hideLoading(): Promise<boolean> {
-      return this.loading.dismiss()
-    }
+    this.getOrders();
+  }
 
-  loadOrders() {
-    this.formattedItems = []
+  async showLoading(): Promise<void> {
+    this.loading = await this.loadingCtrl.create();
+    await this.loading.present();
+  }
+
+  hideLoading(): Promise<boolean> {
+    return this.loading.dismiss()
+  }
+
+  getOrders() {
     this.firebaseService.getOrders()
       .then(result => {
-        this.items = result;
-        this.items.forEach(element => {
-          if (element.payload.doc.data().closed != true) {
-            
-            var item = element.payload.doc.data()
-            item.id = element.payload.doc.id
-            var d = new Date(item.time);
-            item.tooLate = this.compareTime(d);
-            item.time = d.toLocaleString();
-            this.formattedItems.push(item);
-          }
-        });
-        this.formattedItems.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
+        this.formattedItems = []
+        this.formattedItems = this.updateOrders(result)
       })
+  }
+
+  loadOrders() {
+    this.firebaseService.loadOrders()
+      .then(result => {
+        this.formattedItems = []
+        this.formattedItems = this.updateOrders(result)
+      })  
+    }
+
+  updateOrders(result): Array<formattedItem> {
+    console.log(result)
+    var newItems: Array<formattedItem> = []
+    this.items = result;
+    this.items.forEach(element => {
+      if (element.payload.doc.data().closed != true) {
+
+        var item = element.payload.doc.data()
+        item.id = element.payload.doc.id
+        var d = new Date(item.time);
+        item.tooLate = this.compareTime(d);
+        item.time = d.toLocaleString();
+        newItems.push(item);
+      }
+    });
+    newItems.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
+    return newItems
   }
 }
 
@@ -101,3 +116,5 @@ class formattedItem {
   public tooLate = 1;
   public toGo: boolean;
 }
+
+
