@@ -3,6 +3,7 @@ import { FirebaseService } from '../services/firebase.service';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { LoadingController, ToastController, Events } from '@ionic/angular';
+import { eventMethod } from '@ionic/core/dist/types/utils/overlays';
 
 
 @Component({
@@ -54,10 +55,11 @@ export class HomePage implements OnInit {
     }
   }
 
-  reloadPage() {
+  reloadPage(event) {
     this.showLoading();
     setTimeout(() => {
       this.hideLoading();
+      event.target.complete()
     }, 500);
     this.getOrders();
   }
