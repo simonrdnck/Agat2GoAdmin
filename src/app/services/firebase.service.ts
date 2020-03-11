@@ -5,6 +5,7 @@ import 'firebase/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
+import { resolve } from 'url';
 
 
 
@@ -69,6 +70,27 @@ export class FirebaseService{
   addBonus(uid) {
     return new Promise<any>((resolve, reject) => {
       this.afs.collection('user').doc(uid).update({ bonuscard: this.increment })
+    })
+  }
+
+  getNotstop() {
+    return new Promise<any>((resolve, reject) => {
+      this.afs.collection('/notstop').doc('bMBTc9GcNx7JQ5AcwSXO').snapshotChanges()
+      .subscribe(snapshots => {
+        resolve(snapshots)
+      })
+    })
+  }
+
+  setNotstop() {
+    return new Promise<any>((resolve, reject) => {
+      this.afs.collection('/notstop').doc('bMBTc9GcNx7JQ5AcwSXO').update({
+        notstop: true
+      })
+        .then(
+          res => resolve(res),
+          err => reject(err)
+        )
     })
   }
 

@@ -20,6 +20,11 @@ export class AppComponent {
       title: 'Historie',
       url: '/list',
       icon: 'list'
+    },
+    {
+      title: 'Einstellungen',
+      url: '/settings',
+      icon: 'settings'
     }
   ];
 

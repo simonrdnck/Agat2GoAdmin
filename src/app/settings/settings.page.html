@@ -1,0 +1,16 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Einstellungen
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <br>
+    <ion-button *ngIf="!notstop" size="block" (click)="setNotstop()"> Pilotphase beenden!</ion-button>
+    <ion-label *ngIf="notstop">Die Pilotphase wurde beendet. Bitte wenden Sie sich ans Agat2Go Team für weiteren Support.</ion-label>
+</ion-content>
